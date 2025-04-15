@@ -1,0 +1,80 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: url('../img/tela\ login.png') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.login-box {
+    background: #D9D9D9;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
+}
+.logo-img {
+    width: 50px;
+    height: 40px;
+    margin-bottom: 16px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    align-self: flex-start;
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+input {
+    width: 90%;
+    padding: 20px;
+    border: none;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.forgot-password {
+    font-size: 18px;
+    color: black;
+    text-decoration: none;
+    margin-bottom: 15px;
+}
+
+.login-btn {
+    background: #E50000;
+    color: white;
+    padding: 20px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+p {
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+.link-text {
+    color: #000000;
+}
+

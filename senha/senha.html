@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bella Conect - Recuperar Senha</title>
+    <link rel="stylesheet" href="senha.css">
+    <script src="senha.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <img src="https://cdn-icons-png.flaticon.com/512/565/565547.png" alt="Cadeado">
+        <h2>Problemas para entrar?</h2>
+        <p id="descricao">Insira seu email, telefone ou nome de usuário e enviaremos um código de verificação.</p>
+        
+        <!-- Campo inicial -->
+        <input type="text" id="userInput" placeholder="Email, telefone ou nome de usuário">
+        <button id="btnEnviar" onclick="enviarCodigo()">Enviar código</button>
+
+        <!-- Campos para redefinir senha (invisíveis no começo) -->
+        <div id="novaSenhaForm" style="display: none; margin-top: 20px;">
+            <input type="text" id="codigoInput" placeholder="Digite o código">
+            <input type="password" id="novaSenha" placeholder="Digite a nova senha">
+            <button onclick="redefinirSenha()">Redefinir senha</button>
+        </div>
+    </div>
+</body>
+</html>
