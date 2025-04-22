@@ -1,29 +1,64 @@
-const gallery = document.getElementById('gallery');
+document.addEventListener("DOMContentLoaded", () => {
+    const feed = document.getElementById("pinterestFeed");
 
-const images = [
-    './img/img1.jpg',
-    './img/img2.jpg',
-    './img/img3.jpg',
-    './img/img4.jpg',
-    './img/img5.jpg',
-    './img/img6.jpg',
-    './img/img7.jpg',
-    './img/img8.jpg',
-    './img/img9.jpg',
-    './img/img10.jpg',
-    './img/img11.jpg',
-    './img/img12.jpg',
-    './img/img13.jpg',
-    './img/img14.jpg',
-    './img/img15.jpg',
-    './img/img16.jpg',
-    './img/img17.jpg',
-    './img/img18.jpg'
-    
-];
+    async function carregarPins() {
+      try {
+        const resposta = await fetch('https://back-spider.vercel.app/publicacoes/listarPublicacoes');
+        if (!resposta.ok) throw new Error('Erro ao buscar publicações');
 
-images.forEach(src => {
-    const img = document.createElement('img');
-    img.src = src;
-    gallery.appendChild(img);
-});
+        const publicacoes = await resposta.json();
+        if (!Array.isArray(publicacoes)) throw new Error("Resposta inesperada da API");
+
+        feed.innerHTML = '';
+
+        publicacoes.forEach(post => {
+          if (!post.imagem) return;
+
+          const card = document.createElement("div");
+          card.classList.add("pinterest-card");
+
+          card.innerHTML = `
+            <div class="card-header">
+              <img src="https://via.placeholder.com/30" class="logo" alt="Logo"> 
+              <span class="user">Usuário</span>
+            </div>
+
+            <img src="${post.imagem}" alt="Imagem do post" class="post-img">
+
+            <div class="actions">
+              <div>
+                <i class="like-btn">❤️</i>
+                <i>💬</i>
+                <i>📤</i>
+              </div>
+              <div>🔖</div>
+            </div>
+
+            <div class="desc">
+              <strong>1</strong> ${post.descricao || 'Sem descrição'}
+            </div>
+
+            <div class="comments">Ver todos os comentários</div>
+            <div class="date">30/10/2024</div>
+
+            <div class="comment-box">
+              <input type="text" placeholder="Adicione um comentário...">
+              <button>Publicar</button>
+            </div>
+          `;
+
+          const likeBtn = card.querySelector(".like-btn");
+          likeBtn.addEventListener("click", () => {
+            likeBtn.classList.toggle("liked");
+          });
+
+          feed.appendChild(card);
+        });
+      } catch (err) {
+        console.error('Erro ao carregar pins:', err);
+        feed.innerHTML = "<p>Erro ao carregar imagens 😢</p>";
+      }
+    }
+
+    carregarPins();
+  });

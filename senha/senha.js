@@ -1,39 +1,60 @@
-let codigoGerado = "";
+'use strict';
 
-function enviarCodigo() {
-    const userInput = document.getElementById('userInput').value.trim();
+document.addEventListener("DOMContentLoaded", () => {
+  const nextButton = document.getElementById('nextButton');
 
-    if (userInput === "") {
-        alert("Por favor, insira um email, telefone ou nome de usuário.");
-        return;
+  nextButton.addEventListener('click', async () => {
+    const email = document.getElementById('userEmail').value.trim() || "";
+    const palavraChave = document.getElementById('palavraChave').value.trim() || "";
+
+    if (!email || !palavraChave) {
+      alert('Preencha todos os campos!');
+      return;
     }
 
-    // Gera um código de 6 dígitos
-    codigoGerado = Math.floor(100000 + Math.random() * 900000).toString();
+    try {
+      const resultadoSenha = await checarSenha(email, palavraChave);
+      console.log(resultadoSenha);
 
-    // Mostra o código (simulando envio por email)
-    alert(`Seu código de verificação é: ${codigoGerado}`);
-
-    // Atualiza o texto e exibe o formulário de nova senha
-    document.getElementById("descricao").textContent = "Digite o código recebido e sua nova senha.";
-    document.getElementById("userInput").style.display = "none";
-    document.getElementById("btnEnviar").style.display = "none";
-    document.getElementById("novaSenhaForm").style.display = "block";
-}
-
-function redefinirSenha() {
-    const codigoDigitado = document.getElementById('codigoInput').value.trim();
-    const novaSenha = document.getElementById('novaSenha').value.trim();
-
-    if (codigoDigitado === "" || novaSenha === "") {
-        alert("Preencha todos os campos.");
-        return;
+      if (resultadoSenha && resultadoSenha.id) {
+        localStorage.setItem('idUser', resultadoSenha.id);
+        window.location.href = './redefinir.html';
+      } else {
+        alert('Email ou palavra-chave incorretos.');
+      }
+    } catch (error) {
+      console.error('Erro ao tentar recuperar a senha:', error);
+      alert('Erro ao tentar recuperar a senha. Tente novamente mais tarde.');
     }
+  });
 
-    if (codigoDigitado === codigoGerado) {
-        alert("Senha redefinida com sucesso!");
-        window.location.href = "index.html"; // Redireciona pra tela de login
-    } else {
-        alert("Código incorreto. Verifique e tente novamente.");
+  async function checarSenha(email, chave) {
+    const url = `https://back-spider.vercel.app/user/RememberPassword`;
+    const dados = {
+      email: email,
+      wordKey: chave,
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dados),
+      });
+
+      if (!response.ok) {
+        const erroTexto = await response.text();
+        console.error('Status:', response.status);
+        console.error('Mensagem do servidor:', erroTexto);
+        throw new Error('Erro ao encontrar o usuário: ' + response.status);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Erro capturado em checarSenha:', error);
+      throw error;
     }
-}
+  }
+});

@@ -1,62 +1,62 @@
-const enviarCadastro = async (nome, email, senha) => {
-    const url = 'https://back-spider.vercel.app/user/cadastrarUser';
+'use strict'
 
-    const dados = {
-        nome: nome,
-        email: email,
-        senha: senha,
-        imagemPerfil: "https://i.pravatar.cc/150?img=3", // imagem default
-        premium: true // precisa ser booleano, não string
-    };
+const form = document.getElementById('loginForm');
 
-    console.log("Enviando dados para API:", JSON.stringify(dados));
+// Pegando os elementos corretamente com base nos IDs únicos
+const nomeInput = document.getElementById('nome');
+const emailInput = document.getElementById('email');
+const senhaInput = document.getElementById('senha');
+
+
+
+const senhaRecuperacaoInput = document.getElementById('senhaRecuperacao');
+
+// Criar parágrafo para exibir mensagens de erro
+const errorMessage = document.createElement('p');
+errorMessage.style.color = 'red';
+errorMessage.style.marginTop = '10px';
+errorMessage.style.display = 'none';
+form.appendChild(errorMessage);
+
+// Evento de envio do formulário
+form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const nome = nomeInput.value.trim();
+    const email = emailInput.value.trim();
+    const senha = senhaInput.value.trim();
+    const senhaRecuperacao = senhaRecuperacaoInput.value.trim();
+    const premium = "0";
+    const imagemPerfil = "https://static.vecteezy.com/ti/vetor-gratis/p1/26434417-padrao-avatar-perfil-icone-do-social-meios-de-comunicacao-do-utilizador-foto-vetor.jpg";
+
+    if (!nome || !email || !senha || !senhaRecuperacao) {
+        errorMessage.textContent = 'Preencha todos os campos!';
+        errorMessage.style.display = 'block';
+        return;
+    }
 
     try {
-        const resposta = await fetch(url, {
-            method: "POST",
+        const response = await fetch('https://back-spider.vercel.app/user/cadastrarUser', {
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json"
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify(dados)
+            body: JSON.stringify({ nome, email, senha, senhaRecuperacao, premium, imagemPerfil })
         });
 
-        const resultado = await resposta.json();
-        console.log("Resposta da API:", resultado);
+        const data = await response.json();
 
-        if (resposta.ok && resultado.success !== false) {
-            alert("Cadastro realizado com sucesso!");
-            window.location.href = "index.html"; // redireciona para login
-        } else {
-            // exibe mensagem de erro da API se houver
-            const msg = resultado.message || "Erro desconhecido ao cadastrar.";
-            alert("Erro ao cadastrar: " + msg);
+        if (!response.ok) {
+            throw new Error(data.message || 'Erro ao realizar cadastro');
         }
-    } catch (erro) {
-        console.error("Erro ao enviar dados:", erro);
-        alert("Erro na conexão. Tente novamente.");
-    }
-};
 
-document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("loginForm");
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
 
-    if (form) {
-        form.addEventListener("submit", function (event) {
-            event.preventDefault();
-
-            const nome = document.getElementById("nome").value.trim();
-            const email = document.getElementById("email").value.trim();
-            const senha = document.getElementById("senha").value;
-
-            console.log("Nome:", nome);
-            console.log("Email:", email);
-            console.log("Senha:", senha);
-
-            if (nome && email && senha) {
-                enviarCadastro(nome, email, senha);
-            } else {
-                alert("Por favor, preencha todos os campos.");
-            }
-        });
+        // Redireciona após sucesso
+        window.location.href = '../login/index.html';
+    } catch (error) {
+        errorMessage.textContent = error.message;
+        errorMessage.style.display = 'block';
     }
 });
