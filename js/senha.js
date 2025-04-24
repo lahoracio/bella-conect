@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (resultadoSenha && resultadoSenha.id) {
         localStorage.setItem('idUser', resultadoSenha.id);
-        window.location.href = './redefinir.html';
+        window.location.href = '../indexs/redefinir.html';
       } else {
         alert('Email ou palavra-chave incorretos.');
       }

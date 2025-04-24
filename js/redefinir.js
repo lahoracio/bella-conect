@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const resposta = await putPassword(digiteSenhaInput, id);
     if (resposta) {
       alert('Senha atualizada com sucesso!');
-      window.location.href = '../login/index.html';
+      window.location.href = '../indexs/index.html';
     } else {
       alert('Erro ao atualizar a senha.');
     }

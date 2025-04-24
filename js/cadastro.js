@@ -54,7 +54,7 @@ form.addEventListener('submit', async (event) => {
         localStorage.setItem('user', JSON.stringify(data.user));
 
         // Redireciona após sucesso
-        window.location.href = '../login/index.html';
+        window.location.href = '../indexs/index.html';
     } catch (error) {
         errorMessage.textContent = error.message;
         errorMessage.style.display = 'block';

@@ -22,7 +22,7 @@ const enviarDados = async (email, senha) => {
         const resultado = await resposta.json(); 
         if (resultado.success) { 
             alert("Login bem-sucedido! Redirecionando...");
-            window.location.href = "../home/home.html"; 
+            window.location.href = "../indexs/home.html"; 
         } else {
             alert("Erro ao fazer login. Verifique suas credenciais.");
         }
